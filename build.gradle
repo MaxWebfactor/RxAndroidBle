@@ -1,6 +1,9 @@
 apply from: 'dependencies.gradle'
 apply from: 'checkstyle.gradle'
 
+plugins {
+    id("maven-publish")
+}
 buildscript {
     apply from: 'dependencies.gradle'
 
@@ -19,6 +22,8 @@ buildscript {
         classpath 'gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:1.1.4'
     }
 }
+
+
 
 allprojects {
     apply plugin: 'com.github.ben-manes.versions'
@@ -71,6 +76,22 @@ allprojects {
                 exceptionFormat "full"
                 events "started", "skipped", "passed", "failed"
                 showStandardStreams true
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+                // You can then customize attributes of the publication as shown below.
+                groupId = 'com.wfandroidrxble'
+                artifactId = 'anroidrxble'
+                version = '1.0'
             }
         }
     }
